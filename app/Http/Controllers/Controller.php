@@ -59,15 +59,8 @@ class Controller extends BaseController
             // 월 지급액
             $monthlyPayment = ( $loan->amount * $monthlyRate ) / ( 1 - ( 1 + $monthlyRate * -12 ) );
 
-            "<br />";
-            echo "amount {$loan->amount} <br />";
-            echo "monthlyRate {$monthlyRate} <br />";
-            echo "monthlyRate * -ii " . ($monthlyRate * -$ii) . "<br />";
-            echo "monthlyPayment {$monthlyPayment} <br />";
-
             // 월 지급 원액
             $principalComponent = $monthlyPrincipalComponent * $ii;
-            echo "principalComponent {$principalComponent} <br />";
 
             //  월단위 이자계산 : 원금 x 연이율 x 월수 /12
             $interestComponent = $monthlyInterestComponent * $ii;
