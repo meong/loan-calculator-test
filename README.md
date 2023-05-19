@@ -14,12 +14,12 @@ sail up
    ● Monthly fixed extra payment (optional)
 
 - [x] 2. Validate the input values to ensure they are valid and provide appropriate error messages for invalid values, such as negative loan amount, interest rate, or loan term.
-- [ ] 3. Implement the logic to calculate the monthly payment amount using the following formula:
+- [x] 3. Implement the logic to calculate the monthly payment amount using the following formula:
    ● Monthly interest rate = (Annual interest rate / 12) / 100
    ● Number of months = Loan term * 12
    ● Monthly payment = (Loan amount * Monthly interest rate) / (1 - (1 + Monthly
    interest rate)^(-Number of months))
-- [ ] 4. Generate an amortization schedule that shows the monthly payment breakdown, including the principal and interest components, for the entire loan term. Store the amortization schedule data in a database table, such as "loan_amortization_schedule", with columns for month number, starting balance, monthly payment, principal component, interest component, and ending balance.
+- [x] 4. Generate an amortization schedule that shows the monthly payment breakdown, including the principal and interest components, for the entire loan term. Store the amortization schedule data in a database table, such as "loan_amortization_schedule", with columns for month number, starting balance, monthly payment, principal component, interest component, and ending balance.
 - [ ] 5. Implement the logic to allow for fixed extra repayments made by the borrower. If the borrower makes extra repayments, the monthly payment should remain the same, but the extra repayment amount should be deducted from the remaining loan balance. Update the amortization schedule in the database to reflect the new loan balance and the shortened loan term.
 - [ ] 6. Generate a schedule that shows the recalculated, shortened loans due to extra payments made by the borrower. Store the updated schedule data in a separate database table, such as "extra_repayment_schedule", with columns for month number, starting balance, monthly payment (unchanged), principal component (unchanged), interest component (unchanged), extra repayment made (if any), ending balance after extra repayment, and remaining loan term after extra repayment.
 
