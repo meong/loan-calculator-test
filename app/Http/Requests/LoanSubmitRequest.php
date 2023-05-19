@@ -25,7 +25,7 @@ class LoanSubmitRequest extends FormRequest
             "amount" => "required|numeric|gt:0",
             "rate" => "required|numeric|gt:0|lte:100",
             "term" => "required|numeric|gt:0",
-            "extra_payment" => "numeric|gt:0",
+            "extra_payment" => "nullable|numeric|gt:0",
         ];
     }
 }

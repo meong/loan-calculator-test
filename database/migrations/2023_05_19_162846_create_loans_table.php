@@ -16,7 +16,7 @@ return new class extends Migration
             $table->integer( "amount");
             $table->string( "rate");
             $table->string( "term");
-            $table->string( "extra_payment");
+            $table->string( "extra_payment")->nullable();
             $table->timestamps();
         });
     }
