@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('loans', function (Blueprint $table) {
             $table->id();
-            $table->string( "amount");
+            $table->integer( "amount");
             $table->string( "rate");
             $table->string( "term");
             $table->string( "extra_payment");
