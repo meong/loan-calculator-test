@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property mixed $id
  * @property mixed $rate
  * @property mixed $amount
+ * @property float|int|mixed $effective_interest_rate
  */
 class Loan extends Model
 {

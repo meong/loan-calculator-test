@@ -22,7 +22,6 @@ return new class extends Migration
 
             $table->integer('ending_balance')->comment("ending balance");
             $table->timestamps();
-            $table->softDeletes();
         });
 
         Schema::table('loan_amortization_schedule', function (Blueprint $table) {

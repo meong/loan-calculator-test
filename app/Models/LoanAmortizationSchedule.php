@@ -20,5 +20,4 @@ class LoanAmortizationSchedule extends Model
 {
     protected $table = "loan_amortization_schedule";
     use HasFactory;
-    use SoftDeletes;
 }
