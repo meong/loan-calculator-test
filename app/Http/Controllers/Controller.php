@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoanRepaymentSubmit;
 use App\Http\Requests\LoanSubmitRequest;
 use App\Models\Loan;
 use App\Models\LoanAmortizationSchedule;
 use Carbon\Carbon;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -16,8 +20,14 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    public function index() {
-        return view("index", [] );
+    public function index()
+    {
+        $loans = Loan::orderBy("created_at")->paginate();
+        return view("index", [ "loans" => $loans ] );
+    }
+
+    public function create() {
+        return view("create", [] );
     }
 
     public function submit( LoanSubmitRequest $req ) {
@@ -31,6 +41,14 @@ class Controller extends BaseController
             // loan
             $loan = new Loan();
             $loan->fill( $inputs );
+
+            // 유효이자율 : 원금에 월 고정 추가 지불 금액을 뺀 유효 이자율 계산
+            // REF : https://m.blog.naver.com/ckdrl_ckdrl/221982186150
+            // 8% 반기별 복리이자인 경우 8%는 명목이자율이고 유효이자율은 (1+0.08/2)²-1=0.0816 즉, 8.16%가 된다.
+            $month_term = ( $loan->term * 12 );
+            Log::debug( ["month_term", $month_term]);
+            $effective_interest_rate = ( pow( 1 + ($loan->rate/100) / $loan->term, $loan->term ) - 1 ) * 100;
+            $loan->effective_interest_rate = $effective_interest_rate;
             $loan->save();
 
             $this->createSchedule( $loan );
@@ -40,6 +58,14 @@ class Controller extends BaseController
             DB::rollBack();
             Log::debug( "add Loan Exception", [ $e->getFile(), $e->getLine(), $e->getMessage(), $e->getCode() ] );
         }
+
+    }
+
+    public function repayment( Request $request, Loan $loan ) {
+        return view("repayment", [ "loan" => $loan ] );
+    }
+
+    public function repaymentSubmit( LoanRepaymentSubmit $request, Loan $loan ) {
 
     }
 

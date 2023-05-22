@@ -20,4 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', [ Controller::class, 'index' ] )->name("index");
+Route::get('/create', [ Controller::class, 'create' ] )->name("create");
 Route::post('/submit', [ Controller::class, 'submit' ] )->name("submit");
+Route::get('/repayment/{loan}', [ Controller::class, 'repayment' ] )->name("repayment");
+Route::post('/repayment/{loan}', [ Controller::class, 'repaymentSubmit' ] )->name("repayment-submit");
