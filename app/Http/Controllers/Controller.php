@@ -15,6 +15,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -50,8 +51,10 @@ class Controller extends BaseController
             $loan->effective_interest_rate = $effective_interest_rate;
             $loan->save();
 
-            $this->createSchedule( $loan );
-
+            $schedules = $this->getCreateSchedule( $loan );
+            foreach( $schedules as $schedule ) {
+                $schedule->save();
+            }
             DB::commit();
 
             return redirect()->route('index')->with("success", "성공적으로 처리되었습니다." );
@@ -90,8 +93,10 @@ class Controller extends BaseController
             // 기존 스케쥴의 첫번째 스케쥴 일정을 획득. 기존 일정을 기준으로 리스케쥴링 한다.
             $firstSchedule = LoanAmortizationSchedule::where("loan_id", $loan->id)->orderBy("idx")->first();
 
-            $this->createSchedule( $loan, $firstSchedule );
-
+            $schedules = $this->getCreateSchedule( $loan, $firstSchedule );
+            foreach( $schedules as $schedule ) {
+                $schedule->save();
+            }
             DB::commit();
 
             return redirect()->route('index')->with("success", "성공적으로 처리되었습니다." );
@@ -103,7 +108,16 @@ class Controller extends BaseController
     }
 
 
-    private function createSchedule( Loan $loan, $firstSchedule = null ) {
+    public function getPreviewSchedules( LoanSubmitRequest $request ): Collection
+    {
+        $inputs = $request->only(["amount", "rate", "term", "extra_payment"]);
+        $loan = new Loan();
+        $loan->fill($inputs);
+        return $this->getCreateSchedule($loan);
+    }
+
+    private function getCreateSchedule( Loan $loan, $firstSchedule = null ): Collection
+        {
 
         $isRepayment = ( $loan->repayment_amount > 0 && $firstSchedule );
 
@@ -116,6 +130,7 @@ class Controller extends BaseController
         // repayment 인 경우 기존 스케쥴 삭제
         $loan->extraRepaymentSchedules()->delete();
 
+        $schedules = collect([]);
         // 월 기간 루프 정보 획득 via term
         for ( $ii = 1 ; $ii <= $loan->getMonthlyTerm() ; $ii++ ) {
 
@@ -148,18 +163,18 @@ class Controller extends BaseController
             $loanSchedule->ending_balance = $loan->amount - ( $principalComponent + ( $loan->extra_payment * $ii ) + $loan->repayment_amount );
 
             // TODO : 남은 대출 기간 정보 획득 필요
-            if( $isRepayment ) {
-                $loanSchedule->remaining_loan_term = 0;
-            }
+            $loanSchedule->remaining_loan_term = 0;
 
             if( $loanSchedule->ending_balance <= 0 ) {
                 // TODO : 마지막 달 스케쥴에 금액이 오버하는 경우 0원에 맞추어 이자율과 함께 계산 필요
             }
-
-            $loanSchedule->save();
+            $schedules->add( $loanSchedule );
+//            $loanSchedule->save();
 
             if( $loanSchedule->ending_balance <= 0 ) break;
         }
+
+        return $schedules;
 
     }
 

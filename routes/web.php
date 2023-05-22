@@ -23,6 +23,8 @@ Route::get('/', [ Controller::class, 'index' ] )->name("index");
 Route::get('/create', [ Controller::class, 'create' ] )->name("create");
 Route::post('/submit', [ Controller::class, 'submit' ] )->name("submit");
 
+Route::get('/preview-schedules', [ Controller::class, 'getPreviewSchedules' ] )->name("get-preview-schedules");
+
 Route::get('/schedules/{loan}', [ Controller::class, 'schedules' ] )->name("schedules");
 
 Route::get('/repayment/{loan}', [ Controller::class, 'repayment' ] )->name("repayment");
