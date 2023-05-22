@@ -3,7 +3,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 </head>
-<form id="form01" method="post" action="/repayment">
+<form id="form01" method="post" action="/repayment/{{$loan->id}}/submit">
     {{ csrf_field() }}
     Loan amount1 <input type="text" name="amount" value="{{$loan->amount}}" disabled="disabled" /> <br />
     Annual interest rate <input type="text" name="rate" value="{{$loan->rate}}" disabled="disabled" /> <br />

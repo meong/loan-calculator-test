@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string( "term")->comment("대출금액");
             $table->string( "extra_payment")->nullable()->comment("매월 고정 추가 지불금액");
             $table->string( "effective_interest_rate")->nullable()->comment("복리를 고려한 유효 월 이자율");
+            $table->integer( "repayment_amount")->default(0)->comment("추가지불 금액");
 
             // REF : https://www.google.com/search?q=effective+interest+rate+%EA%B5%AC%ED%95%98%EB%8A%94+%EB%B0%A9%EB%B2%95&oq=effective+interest+rate+%EA%B5%AC%ED%95%98%EB%8A%94&aqs=chrome.1.69i57j33i160l3.4745j0j7&sourceid=chrome&ie=UTF-8
             $table->timestamps();

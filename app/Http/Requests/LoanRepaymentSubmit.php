@@ -11,7 +11,7 @@ class LoanRepaymentSubmit extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,7 @@ class LoanRepaymentSubmit extends FormRequest
     public function rules(): array
     {
         return [
-            "extra_payment" => "required|numeric|gt:0",
+            "extra_repayments" => "required|numeric|gt:0",
         ];
     }
 }
