@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('loan_amortization_schedule', function (Blueprint $table) {
+        Schema::create('extra_repayment_schedule', function (Blueprint $table) {
             $table->id();
             $table->tinyInteger("idx");
             $table->integer('ym')->comment("yyyymm");
@@ -21,14 +21,15 @@ return new class extends Migration
             $table->integer('interest_component')->comment("이자");
 
             $table->integer('ending_balance')->comment("기말 잔액");
+            $table->integer('remaining_loan_term')->comment("남은 대출기간");
             $table->timestamps();
+            $table->softDeletes();
         });
 
-        Schema::table('loan_amortization_schedule', function (Blueprint $table) {
+        Schema::table('extra_repayment_schedule', function (Blueprint $table) {
             $table->unsignedBigInteger('loan_id', false)->after("id")->nullable()->comment("loan_fk");
             $table->foreign('loan_id')->references('id')->on('loans');
         });
-
     }
 
     /**
@@ -36,11 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('loan_amortization_schedule', function (Blueprint $table) {
-            $table->dropForeign(['loan_id']);
-            $table->dropColumn('loan_id');
-        });
-
-        Schema::dropIfExists('loan_amortization_schedule');
+        Schema::dropIfExists('extra_repayment_schedule');
     }
 };
