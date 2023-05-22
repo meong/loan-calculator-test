@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property mixed $repayment_amount
  * @property mixed $loanAmortizationSchedules
  * @property mixed $extraRepaymentSchedules
+ * @property mixed $extra_payment
  */
 class Loan extends Model
 {

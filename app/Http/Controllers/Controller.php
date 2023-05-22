@@ -144,8 +144,8 @@ class Controller extends BaseController
             $loanSchedule->monthly_payment = $principalComponent + $interestComponent;
             $loanSchedule->principal_component = $principalComponent;
             $loanSchedule->interest_component = $interestComponent;
-            Log::debug( [ "loanSchedule->ending_balance", $loan->amount, $principalComponent, $loan->repayment_amount ] );
-            $loanSchedule->ending_balance = $loan->amount - $principalComponent - $loan->repayment_amount;
+            Log::debug( [ "loanSchedule->ending_balance", $loan->amount, $principalComponent, $loan->extra_payment, $loan->repayment_amount ] );
+            $loanSchedule->ending_balance = $loan->amount - ( $principalComponent + ( $loan->extra_payment * $ii ) + $loan->repayment_amount );
 
             // TODO : 남은 대출 기간 정보 획득 필요
             if( $isRepayment ) {
